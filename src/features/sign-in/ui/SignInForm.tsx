@@ -2,6 +2,9 @@ import { useForm } from "react-hook-form";
 import { Button } from "../../../shared/ui/button";
 import { Input } from "../../../shared/ui/input";
 import styles from "./SignInForm.module.css";
+import { useSignInMutation } from "../api/signInApi";
+import { useDispatch } from "react-redux";
+import { setAccessToken } from "../../../entities/session";
 
 type SignInFormValues = {
   email: string;
@@ -15,9 +18,32 @@ export function SignInForm() {
       password: "",
     },
   });
+  const [signIn, { isLoading, isError, isSuccess }] = useSignInMutation();
+  const dispatch = useDispatch();
 
-  function onSubmit(values: SignInFormValues) {
-    console.log("Email из формы:", values.email);
+  async function onSubmit(values: SignInFormValues) {
+    try {
+      const response = await signIn({
+        username: values.email,
+        password: values.password,
+      }).unwrap();
+      console.log(response);
+      dispatch(setAccessToken(response.access_token));
+    } catch (error) {
+      console.error("Ошибка входа:", error);
+    }
+  }
+
+  {
+    isError && (
+      <p role="alert">
+        Не удалось войти. Проверьте данные или попробуйте позже.
+      </p>
+    );
+  }
+
+  {
+    isSuccess && <p role="status">Запрос входа выполнен успешно.</p>;
   }
 
   return (
@@ -40,7 +66,9 @@ export function SignInForm() {
         />
       </label>
 
-      <Button type="submit">Вход</Button>
+      <Button type="submit" disabled={isLoading}>
+        {isLoading ? "Входим…" : "Вход"}
+      </Button>
     </form>
   );
 }

@@ -1,23 +1,24 @@
+import { Link } from "react-router-dom";
 import styles from "./NavigationPrompt.module.css";
 
 type NavigationPromptProps = {
   text: string;
   linkText: string;
-  href: string;
+  to: string;
 };
 
 export function NavigationPrompt({
   text,
   linkText,
-  href,
+  to,
 }: NavigationPromptProps) {
   return (
     <div className={styles.prompt}>
       <span>{text}</span>
 
-      <a className={styles.link} href={href}>
+      <Link className={styles.link} to={to}>
         {linkText}
-      </a>
+      </Link>
     </div>
   );
 }
