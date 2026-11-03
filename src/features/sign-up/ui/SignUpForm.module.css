@@ -47,3 +47,10 @@
   margin: 0;
   accent-color: #7000ff;
 }
+
+.error {
+  margin: 0;
+  color: #d92d20;
+  font-size: 12px;
+  line-height: 1.4;
+}

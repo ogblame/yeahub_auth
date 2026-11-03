@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { baseApi } from "../../../shared/api";
+import { baseApi, configureApiAuth } from "../../../shared/api";
 import { sessionReducer } from "../../../entities/session";
 
 export const store = configureStore({
@@ -11,3 +11,7 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(baseApi.middleware),
 });
+
+configureApiAuth(() => store.getState().session.accessToken);
+
+export type RootState = ReturnType<typeof store.getState>;

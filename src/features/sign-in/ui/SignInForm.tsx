@@ -5,6 +5,7 @@ import styles from "./SignInForm.module.css";
 import { useSignInMutation } from "../api/signInApi";
 import { useDispatch } from "react-redux";
 import { setAccessToken } from "../../../entities/session";
+import { useNavigate } from "react-router-dom";
 
 type SignInFormValues = {
   email: string;
@@ -20,6 +21,7 @@ export function SignInForm() {
   });
   const [signIn, { isLoading, isError, isSuccess }] = useSignInMutation();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   async function onSubmit(values: SignInFormValues) {
     try {
@@ -27,8 +29,9 @@ export function SignInForm() {
         username: values.email,
         password: values.password,
       }).unwrap();
-      console.log(response);
+
       dispatch(setAccessToken(response.access_token));
+      navigate("/profile", { replace: true });
     } catch (error) {
       console.error("Ошибка входа:", error);
     }
