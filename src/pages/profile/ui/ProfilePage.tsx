@@ -1,4 +1,5 @@
 import { useGetProfileQuery } from "../../../entities/user";
+import { SignOutButton } from "../../../features/sign-out";
 
 export function ProfilePage() {
   const { data: user, isLoading, isError } = useGetProfileQuery();
@@ -20,6 +21,7 @@ export function ProfilePage() {
       <h1>Личный кабинет</h1>
       <p>Никнейм: {user.username}</p>
       <p>Почта: {user.email}</p>
+      <SignOutButton />
     </main>
   );
 }
